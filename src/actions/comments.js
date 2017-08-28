@@ -67,6 +67,27 @@ export const createComment = (campaignId, newComment) => {
     };
 };
 
+export const updateComment = (campaignId, updatedComment) => {
+    return dispatch => {
+        dispatch(makingAPIRequest());
+        return fetch(`${API_URL}/campaigns/${campaignId}/comments/${updatedComment.id}`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                comment: updatedComment
+            })
+        })
+        .then(response => response.json())
+        .then(comment => {
+            dispatch(successfulAPIRequest());
+            dispatch(replaceComment(comment));
+        })
+        .catch(err => dispatch(unsuccessfulAPIRequest()));
+    };
+};
+
 export const deleteComment = (campaignId, commentId) => {
     return dispatch => {
         dispatch(makingAPIRequest());
@@ -84,5 +105,3 @@ export const deleteComment = (campaignId, commentId) => {
         .catch(err => unsuccessfulAPIRequest());
     };
 };
-
-
