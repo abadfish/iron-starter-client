@@ -1,8 +1,11 @@
 import { expect } from 'chai';
 import uuid from 'uuid';
+import thunk from 'redux-thunk';
+import nock from 'nock';
+import configureMockStore from 'redux-mock-store';
 import { setComments, addComment, removeComment, replaceComment } from '../../src/actions/comments';
 
-describe('Actions for Comments', () => {
+describe('Action Creator Tests for Comments', () => {
     describe('setComments(comments: Array<Object>)', () => {
         it("should return an Object with a type of 'SET_COMMENTS', and an Array of comment Objects", () => {
             const comments = [
@@ -53,4 +56,10 @@ describe('Actions for Comments', () => {
             });
         });
     });
+});
+
+describe('Async Action Creator Tests for Comments', () => {
+    describe('getComments()', () => {
+        it('')
+    })
 });
