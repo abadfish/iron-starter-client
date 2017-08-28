@@ -3,7 +3,8 @@ import uuid from 'uuid';
 import thunk from 'redux-thunk';
 import nock from 'nock';
 import configureMockStore from 'redux-mock-store';
-import { setComments, addComment, removeComment, replaceComment } from '../../src/actions/comments';
+import 'isomorphic-fetch';
+import { setComments, addComment, removeComment, replaceComment, fetchCommentsForCampaignWithId } from '../../src/actions/comments';
 
 describe('Action Creator Tests for Comments', () => {
     describe('setComments(comments: Array<Object>)', () => {
@@ -59,7 +60,51 @@ describe('Action Creator Tests for Comments', () => {
 });
 
 describe('Async Action Creator Tests for Comments', () => {
-    describe('getComments()', () => {
-        it('')
-    })
+    let middlewares;
+    let mockStore;
+    let initialState;
+    let comments;
+    let campaignId;
+
+    beforeEach(() => {
+        middlewares = [thunk];
+        mockStore = configureMockStore(middlewares);
+        initialState = {
+            campaigns: [
+                {
+                    id: uuid(),
+                    title: 'Test Title', 
+                    description: 'Test Description',
+                    goal: 450000,
+                    pledged: 45,
+                    deadeline: new Date(),
+                    comments: []
+                }
+            ]
+        };
+        comments = [
+            { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" },
+            { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" }
+        ];
+        campaignId = initialState.campaigns[0].campaignId;
+    });
+
+    afterEach(() => nock.cleanAll());
+
+    describe('fetchCommentsForCampaignWithId(campaignId: Number)', () => {
+        it('dispatches REQUESTING_API_DATA, SUCCESSFUL_API_REQUEST and SET_COMMENTS action types when getting comments', () => {
+            nock('http://localhost:3001/api')
+                .get(`/campaigns/${campaignId}/comments`)
+                .reply(200, comments)
+
+            const store = mockStore(initialState)
+
+            return store.dispatch(fetchCommentsForCampaignWithId(campaignId))
+                .then(() => expect(store.getActions()).to.deep.equal([
+                    { type: 'MAKING_API_REQUEST' },
+                    { type: 'SUCCESSFUL_API_REQUEST' },
+                    { type: 'SET_COMMENTS', comments }
+                ]));
+        });
+    });
 });
