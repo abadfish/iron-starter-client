@@ -33,7 +33,7 @@ export const replaceComment = comment => {
 
 // @ Async Actions 
 
-export const fetchCommentsForCampaignWithId = campaignId => {
+export const fetchComments = campaignId => {
     return dispatch => {
         dispatch(makingAPIRequest());
         return fetch(`${API_URL}/campaigns/${campaignId}/comments`)
@@ -45,5 +45,26 @@ export const fetchCommentsForCampaignWithId = campaignId => {
             .catch(err => dispatch(unsuccessfulAPIRequest()));
     };
 };
+
+export const createComment = (campaignId, newComment) => {
+    return dispatch => {
+        dispatch(makingAPIRequest());
+        return fetch(`${API_URL}/campaigns/${campaignId}/comments`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                comment: newComment
+            })
+        })
+        .then(response => response.json())
+        .then(comment => {
+            dispatch(successfulAPIRequest());
+            dispatch(addComment(comment));
+        })
+        .catch(err => dispatch(unsuccessfulAPIRequest()));
+    }
+}
 
 

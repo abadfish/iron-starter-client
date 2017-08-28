@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 import configureMockStore from 'redux-mock-store';
 import 'isomorphic-fetch';
-import { setComments, addComment, removeComment, replaceComment, fetchCommentsForCampaignWithId } from '../../src/actions/comments';
+import { setComments, addComment, removeComment, replaceComment, fetchComments, createComment } from '../../src/actions/comments';
 
 describe('Action Creator Tests for Comments', () => {
     describe('setComments(comments: Array<Object>)', () => {
@@ -60,50 +60,66 @@ describe('Action Creator Tests for Comments', () => {
 });
 
 describe('Async Action Creator Tests for Comments', () => {
-    let middlewares;
-    let mockStore;
-    let initialState;
-    let comments;
-    let campaignId;
-
+    const initialState = {
+        campaigns: [
+            {
+                id: uuid(),
+                title: 'Test Title', 
+                description: 'Test Description',
+                goal: 450000,
+                pledged: 45,
+                deadline: new Date(),
+                comments: []
+            }
+        ]
+    };
+    const { campaignId } = initialState.campaigns[0];
+    const url = 'http://localhost:3001/api';
+    const middlewares = [thunk];
+    const mockStore = configureMockStore(middlewares);
+    let store;
+    
     beforeEach(() => {
-        middlewares = [thunk];
-        mockStore = configureMockStore(middlewares);
-        initialState = {
-            campaigns: [
-                {
-                    id: uuid(),
-                    title: 'Test Title', 
-                    description: 'Test Description',
-                    goal: 450000,
-                    pledged: 45,
-                    deadeline: new Date(),
-                    comments: []
-                }
-            ]
-        };
-        comments = [
-            { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" },
-            { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" }
-        ];
-        campaignId = initialState.campaigns[0].campaignId;
+        store = mockStore(initialState)
     });
 
     afterEach(() => nock.cleanAll());
 
-    describe('fetchCommentsForCampaignWithId(campaignId: Number)', () => {
-        it('dispatches REQUESTING_API_DATA, SUCCESSFUL_API_REQUEST and SET_COMMENTS action types when getting comments', () => {
-            nock('http://localhost:3001/api')
+    describe('fetchComments(campaignId: Number)', () => {
+        it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and SET_COMMENTS action types when getting comments', () => {
+            let comments = [
+                { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" },
+                { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" }
+            ];
+
+            nock(url)
                 .get(`/campaigns/${campaignId}/comments`)
                 .reply(200, comments)
 
-            const store = mockStore(initialState)
-
-            return store.dispatch(fetchCommentsForCampaignWithId(campaignId))
+            return store.dispatch(fetchComments(campaignId))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     { type: 'MAKING_API_REQUEST' },
                     { type: 'SUCCESSFUL_API_REQUEST' },
                     { type: 'SET_COMMENTS', comments }
+                ]));
+        });
+    });
+
+    describe('createComment(campaignId: Number, comment: Object)', () => {
+        it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and ADD_COMMENT action types', () => {
+
+            const comment = { id: uuid(), content: 'Test Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" };
+            const newComment = { content: 'Test Comment' };
+            
+            nock(url)
+                .post(`/campaigns/${campaignId}/comments`)
+                .reply(201, comment)
+
+            return store.dispatch(createComment(campaignId, newComment))
+                .then(() => expect(store.getActions()).to.deep.equal([
+                    { type: 'MAKING_API_REQUEST' },
+                    { type: 'SUCCESSFUL_API_REQUEST' },
+                    { type: 'ADD_COMMENT', comment }
                 ]));
         });
     });
