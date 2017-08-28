@@ -6,9 +6,9 @@ import configureMockStore from 'redux-mock-store';
 import 'isomorphic-fetch';
 import { setComments, addComment, removeComment, replaceComment, fetchComments, createComment } from '../../src/actions/comments';
 
-describe('Action Creator Tests for Comments', () => {
+describe('Comments Action Creators', () => {
     describe('setComments(comments: Array<Object>)', () => {
-        it("should return an Object with a type of 'SET_COMMENTS', and an Array of comment Objects", () => {
+        it("should return an Object with a 'SET_COMMENTS' type and an comments: Array<Comment>", () => {
             const comments = [
                 { id: uuid(), content: 'First Comment' },
                 { id: uuid(), content: 'Second Comment' }
@@ -22,7 +22,7 @@ describe('Action Creator Tests for Comments', () => {
     });
 
     describe('addComment(comment: Object)', () => {
-        it("should return an Object with a type of 'ADD_COMMENT' and a comment Object", () => {
+        it("should return an Object with a 'ADD_COMMENT' type and a comment: Object", () => {
             const comment = {
                 id: uuid(),
                 content: 'Test Content'
@@ -36,7 +36,7 @@ describe('Action Creator Tests for Comments', () => {
     });
 
     describe('removeComment(commentId: Number)', () => {
-        it("should return an Object with a type of 'REMOVE_COMMENT', and a commendId Number", () => {
+        it("should return an Object with a 'REMOVE_COMMENT' type and a commendId: Number", () => {
             expect(removeComment(1)).to.deep.equal({
                 type: 'REMOVE_COMMENT', 
                 commentId: 1
@@ -45,7 +45,7 @@ describe('Action Creator Tests for Comments', () => {
     });
 
     describe('replaceComment(comment: Object)', () => {
-        it("should return an Object with a type of 'REPLACE_COMMENT' and a comment Object", () => {
+        it("should return an Object with a 'REPLACE_COMMENT' type and a comment: Object", () => {
             const comment = {
                 id: uuid(),
                 content: 'Test Content'
@@ -59,7 +59,7 @@ describe('Action Creator Tests for Comments', () => {
     });
 });
 
-describe('Async Action Creator Tests for Comments', () => {
+describe('Comments Async Actions', () => {
     const initialState = {
         campaigns: [
             {
@@ -86,7 +86,7 @@ describe('Async Action Creator Tests for Comments', () => {
     afterEach(() => nock.cleanAll());
 
     describe('fetchComments(campaignId: Number)', () => {
-        it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and SET_COMMENTS action types when getting comments', () => {
+        it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and SET_COMMENTS action types', () => {
             let comments = [
                 { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" },
                 { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" }
@@ -107,7 +107,6 @@ describe('Async Action Creator Tests for Comments', () => {
 
     describe('createComment(campaignId: Number, comment: Object)', () => {
         it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and ADD_COMMENT action types', () => {
-
             const comment = { id: uuid(), content: 'Test Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" };
             const newComment = { content: 'Test Comment' };
             

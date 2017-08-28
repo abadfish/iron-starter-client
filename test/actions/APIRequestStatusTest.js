@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { makingAPIRequest, successfulAPIRequest, unsuccessfulAPIRequest } from '../../src/actions/apiRequestStatus';
 
-describe('Action Creator Tests for APIRequestStatus', () => {
+describe('APIRequestStatus Action Creators', () => {
     describe('makingAPIRequest()', () => {
         it("should return an Object with a type of 'MAKING_API_REQUEST'", () => {
             expect(makingAPIRequest()).to.deep.equal({ type: 'MAKING_API_REQUEST' });
