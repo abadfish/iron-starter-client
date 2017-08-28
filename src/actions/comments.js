@@ -17,19 +17,19 @@ export const addComment = comment => {
     };
 };
 
-export const removeComment = commentId => {
-    return {
-        type: 'REMOVE_COMMENT', 
-        commentId
-    };
-};
-
 export const replaceComment = comment => {
     return {
         type: 'REPLACE_COMMENT',
         comment
     }
 }
+
+export const removeComment = commentId => {
+    return {
+        type: 'REMOVE_COMMENT', 
+        commentId
+    };
+};
 
 // @ Async Actions 
 
@@ -64,7 +64,25 @@ export const createComment = (campaignId, newComment) => {
             dispatch(addComment(comment));
         })
         .catch(err => dispatch(unsuccessfulAPIRequest()));
-    }
-}
+    };
+};
+
+export const deleteComment = (campaignId, commentId) => {
+    return dispatch => {
+        dispatch(makingAPIRequest());
+        return fetch(`${API_URL}/campaigns/${campaignId}/comments/${commentId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                dispatch(successfulAPIRequest());
+                dispatch(removeComment(commentId));
+            } else {
+                dispatch(unsuccessfulAPIRequest());
+            }
+        })
+        .catch(err => unsuccessfulAPIRequest());
+    };
+};
 
 
