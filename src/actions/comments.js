@@ -1,4 +1,8 @@
-import { makingAPIRequest, successfulAPIRequest, unsuccessfulAPIRequest } from './apiRequestStatus';
+import { 
+    makingAPIRequest, 
+    successfulAPIRequest, 
+    unsuccessfulAPIRequest 
+} from './apiRequestStatus';
 
 const API_URL = 'http://localhost:3001/api';
 // @ Action Creators
