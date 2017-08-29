@@ -97,7 +97,7 @@ describe('Campaigns Reducer', () => {
         ]);
     });
 
-    describe('Should pass comments data to Comments Reducer', () => {
+    describe('Nested Comments Reducer State', () => {
 
         let comments; 
 
