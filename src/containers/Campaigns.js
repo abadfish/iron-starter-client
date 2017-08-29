@@ -1,5 +1,11 @@
 import React from 'react'
 
-export default function Campaigns () {
-    return (<div className='campaigns'>Campaigns</div>)
+const Campaigns = () => {
+    return (
+        <div>
+            <h1>Campaigns</h1>
+        </div>
+    );
 }
+
+export default Campaigns;
