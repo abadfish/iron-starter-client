@@ -7,61 +7,67 @@ import 'isomorphic-fetch';
 import { setComments, addComment, removeComment, replaceComment, fetchComments, createComment, updateComment, deleteComment } from '../../src/actions/comments';
 
 describe('Comments Action Creators', () => {
-    describe('setComments(comments: Array<Object>)', () => {
-        it("should return an Object with a 'SET_COMMENTS' type and an comments: Array<Comment>", () => {
-            const comments = [
-                { id: uuid(), content: 'First Comment' },
-                { id: uuid(), content: 'Second Comment' }
-            ];
+    let comment;
+    let comments;
 
+    before(() => {
+        comment = {
+            id: uuid(),
+            content: 'Test Content',
+            campaign_id: uuid()
+        };
+        comments = [
+            { id: uuid(), content: 'First Comment', campaign_id: uuid() },
+            { id: uuid(), content: 'Second Comment', campaign_id: uuid() }
+        ];
+    })
+
+    describe('setComments(comments: Array<Object>)', () => {
+        it("should return an Object with a 'SET_COMMENTS' type, a comments: Array<Comment> and camapaign_id", () => {
             expect(setComments(comments)).to.deep.equal({
                 type: 'SET_COMMENTS', 
-                comments
+                comments,
+                campaignId: comments[0].campaign_id
             });
         });
     });
 
     describe('addComment(comment: Object)', () => {
         it("should return an Object with a 'ADD_COMMENT' type and a comment: Object", () => {
-            const comment = {
-                id: uuid(),
-                content: 'Test Content'
-            };
-
             expect(addComment(comment)).to.deep.equal({
                 type: 'ADD_COMMENT', 
-                comment
+                comment,
+                campaignId: comment.campaign_id
             });
         });
     });
 
     describe('replaceComment(comment: Object)', () => {
         it("should return an Object with a 'REPLACE_COMMENT' type and a comment: Object", () => {
-            const comment = {
-                id: uuid(),
-                content: 'Test Content'
-            };
-
             expect(replaceComment(comment)).to.deep.equal({
                 type: 'REPLACE_COMMENT',
-                comment
+                comment,
+                campaignId: comment.campaign_id
             });
         });
     });
 
-    describe('removeComment(commentId: Number)', () => {
+    describe('removeComment(commentId: Number, campaignId: Number)', () => {
         it("should return an Object with a 'REMOVE_COMMENT' type and a commendId: Number", () => {
-            expect(removeComment(1)).to.deep.equal({
+            const { id, campaign_id } = comments[0];
+            expect(removeComment(id, campaign_id)).to.deep.equal({
                 type: 'REMOVE_COMMENT', 
-                commentId: 1
+                commentId: id, 
+                campaignId: campaign_id
             });
         });
     });
 });
 
 describe('Comments Async Actions', () => {
+    const campaignId = uuid();
     const campaign = {
-        id: uuid(),
+        id: campaignId,
         title: 'Test Title', 
         description: 'Test Description',
         goal: 450000,
@@ -69,8 +75,13 @@ describe('Comments Async Actions', () => {
         deadline: new Date(),
         created_at: new Date(),
         updated_at: new Date(),
-        comments: []
-    };
+        comments: [
+            { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign_id: campaignId },
+            { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign_id: campaignId }
+        ]
+    }
+    const comments = campaign.comments;
+    const comment = comments[0];
     const initialState = {
         campaigns: [
             campaign
@@ -84,16 +95,9 @@ describe('Comments Async Actions', () => {
         { type: 'SUCCESSFUL_API_REQUEST' }
     ];
     let store;
-    let comment;
-    let comments;
     
     beforeEach(() => {
         store = mockStore(initialState)
-        comments = [
-            { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" },
-            { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" }
-        ];
-        comment = { id: uuid(), content: 'Test Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" };
     });
 
     afterEach(() => nock.cleanAll());
@@ -107,7 +111,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(fetchComments(campaign.id))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'SET_COMMENTS', comments }
+                    { type: 'SET_COMMENTS', comments, campaignId: comments[0].campaign_id }
                 ]));
         });
     });
@@ -123,7 +127,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(createComment(campaign.id, newComment))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'ADD_COMMENT', comment }
+                    { type: 'ADD_COMMENT', comment, campaignId: comment.campaign_id }
                 ]));
         });
     });
@@ -139,7 +143,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(updateComment(campaign.id, updatedComment))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'REPLACE_COMMENT', comment: updatedComment }
+                    { type: 'REPLACE_COMMENT', comment: updatedComment, campaignId: comment.campaign_id }
                 ]));
         });
     });
@@ -153,7 +157,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(deleteComment(campaign.id, comment.id))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'REMOVE_COMMENT', commentId: comment.id }
+                    { type: 'REMOVE_COMMENT', commentId: comment.id, campaignId: comment.campaign_id }
                 ]));
         });
     });

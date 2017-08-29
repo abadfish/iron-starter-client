@@ -6,28 +6,32 @@ const API_URL = 'http://localhost:3001/api';
 export const setComments = comments => {
     return {
         type: 'SET_COMMENTS',
-        comments
+        comments,
+        campaignId: comments[0].campaign_id
     };
 };
 
 export const addComment = comment => {
     return { 
         type: 'ADD_COMMENT', 
-        comment
+        comment,
+        campaignId: comment.campaign_id
     };
 };
 
 export const replaceComment = comment => {
     return {
         type: 'REPLACE_COMMENT',
-        comment
+        comment,
+        campaignId: comment.campaign_id
     }
 }
 
-export const removeComment = commentId => {
+export const removeComment = (commentId, campaignId) => {
     return {
         type: 'REMOVE_COMMENT', 
-        commentId
+        commentId,
+        campaignId
     };
 };
 
@@ -97,7 +101,7 @@ export const deleteComment = (campaignId, commentId) => {
         .then(response => {
             if (response.ok) {
                 dispatch(successfulAPIRequest());
-                dispatch(removeComment(commentId));
+                dispatch(removeComment(commentId, campaignId));
             } else {
                 dispatch(unsuccessfulAPIRequest());
             }
