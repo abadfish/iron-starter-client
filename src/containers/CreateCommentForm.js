@@ -21,6 +21,9 @@ class CreateCommentForm extends Component {
     handleOnSubmit = event => {
         event.preventDefault()
         const comment = this.state;
+        const { createComment, campaignId } = this.props;
+        createComment(campaignId, comment)
+        this.setState({ content: '' });
     }
 
     render() {
@@ -36,7 +39,12 @@ class CreateCommentForm extends Component {
                     </textarea>
                 </div>
                 <div>
-                    <button type="submit">Create</button>
+                    <button 
+                        style={{ marginTop: '16px' }}  
+                        type="submit"
+                    >
+                        Create
+                    </button>
                 </div>
             </form>
         );

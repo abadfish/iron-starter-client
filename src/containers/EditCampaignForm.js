@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { createCampaign } from '../actions/campaigns';
+import { updateCampaign } from '../actions/campaigns';
 
-class CreateCampaignForm extends Component {
+class EditCampaignForm extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             title: '',
-            description: '',
+            description: '', 
             goal: 0,
-            pledged: 0,
+            pledged: 0
+        }
+    }
+
+    componentDidMount() {
+        this.setState({
+            ...this.props.campaign
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.campaign) {
+            this.setState({
+                ...nextProps.campaign
+            })
         }
     }
 
@@ -24,13 +38,13 @@ class CreateCampaignForm extends Component {
     handleOnSubmit = event => {
         event.preventDefault()
         const campaign = this.state;
-        this.props.createCampaign(campaign, this.props.history);
+        this.props.updateCampaign(campaign, this.props.history);
     }
 
     render() {
         return (
             <form onSubmit={this.handleOnSubmit}>
-                <h2>Create New Campaign</h2>
+                <h2>Edit {this.state.title} Campaign</h2>
                 <div>
                     <div>
                         <label htmlFor="title">Title:</label>
@@ -77,10 +91,10 @@ class CreateCampaignForm extends Component {
                 </div>
                 <div>
                     <button 
-                        style={{ marginTop: '16px' }}  
+                        style={{ marginTop: '16px' }} 
                         type="submit"
                     >
-                        Create
+                        Update
                     </button>
                 </div>
             </form>
@@ -88,4 +102,10 @@ class CreateCampaignForm extends Component {
     }
 };
 
-export default connect(null, { createCampaign })(CreateCampaignForm);
+const mapStateToProps = (state, ownProps) => {
+    return ({
+        campaign: state.campaigns.find(campaign => campaign.id === +ownProps.location.state.campaignId)
+    });
+};
+
+export default connect(mapStateToProps, { updateCampaign })(EditCampaignForm);
