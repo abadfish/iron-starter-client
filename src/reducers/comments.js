@@ -1,13 +1,11 @@
 export default (state = [], action) => {
     switch(action.type) {
 
-        case 'SET_COMMENTS': {
+        case 'SET_COMMENTS':
             return action.comments;
-        };
 
-        case 'ADD_COMMENT': {
+        case 'ADD_COMMENT':
             return state.concat(action.comment);
-        };
 
         case 'REPLACE_COMMENT': {
             const index = state.findIndex(comment => comment.id === action.comment.id);
@@ -28,8 +26,7 @@ export default (state = [], action) => {
             ];
         };
 
-        default: {
+        default:
             return state;
-        };
     };
 };

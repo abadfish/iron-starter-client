@@ -49,7 +49,7 @@ export const fetchCampaigns = () => {
     };
 };
 
-export const createCampaign = campaignData => {
+export const createCampaign = (campaign, routerHistory) => {
     return dispatch => {
         dispatch(makingAPIRequest());
         return fetch(`${API_URL}/campaigns`, {
@@ -58,13 +58,14 @@ export const createCampaign = campaignData => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                campaign: campaignData
+                campaign
             })
         })
             .then(response => response.json())
             .then(campaign => {
                 dispatch(successfulAPIRequest());
                 dispatch(addCampaign(campaign));
+                routerHistory.replace('/');
             })
             .catch(err => dispatch(unsuccessfulAPIRequest()));
     };

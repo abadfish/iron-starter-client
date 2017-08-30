@@ -115,12 +115,15 @@ describe('Campaigns Action', () => {
         describe('createCampaign(campaign: Object)', () => {
             it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and ADD_CAMPAIGN action types', () => {
                 const newCampaign = Object.assign({}, campaign, { id: uuid(), title: 'hi' })
+                const routerHistory = {
+                    replace(string) { return string }
+                }
     
                 nock(url)
                     .post(`/campaigns`)
                     .reply(201, newCampaign);
     
-                return store.dispatch(createCampaign(newCampaign))
+                return store.dispatch(createCampaign(newCampaign, routerHistory))
                     .then(() => expect(store.getActions()).to.deep.equal([
                         ...requiredActionCreators,
                         { type: 'ADD_CAMPAIGN', campaign: newCampaign }
