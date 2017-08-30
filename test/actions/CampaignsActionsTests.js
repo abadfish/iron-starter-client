@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import nock from 'nock';
 import configureMockStore from 'redux-mock-store';
 import 'isomorphic-fetch';
-import { setCampaigns, addCampaign, removeCampaign, replaceCampaign, fetchCampaigns, createCampaign, updateCampaign, deleteCampaign } from '../../src/actions/campaigns';
+import { setCampaigns, addCampaign, removeCampaign, replaceCampaign, fetchCampaigns, fetchCampaign, createCampaign, updateCampaign, deleteCampaign } from '../../src/actions/campaigns';
 
 describe('Campaigns Action', () => {
 
@@ -108,6 +108,20 @@ describe('Campaigns Action', () => {
                     .then(() => expect(store.getActions()).to.deep.equal([
                         ...requiredActionCreators,
                         { type: 'SET_CAMPAIGNS', campaigns }
+                    ]));
+            });
+        });
+
+        describe('fetchCampaign()', () => {
+            it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and SET_CAMPAIGNS action types', () => {
+                nock(url)
+                    .get(`/campaigns/${campaign.id}`)
+                    .reply(200, campaign);
+    
+                return store.dispatch(fetchCampaign(campaign.id))
+                    .then(() => expect(store.getActions()).to.deep.equal([
+                        ...requiredActionCreators,
+                        { type: 'SET_CAMPAIGNS', campaigns: [campaign] }
                     ]));
             });
         });
