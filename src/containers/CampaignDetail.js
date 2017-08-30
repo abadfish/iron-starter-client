@@ -1,34 +1,47 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link, Route } from 'react-router-dom';
 import CreateCommentForm from './CreateCommentForm';
-import { fetchCampaign } from '../actions/campaigns';
+import EditCampaignForm from './EditCampaignForm';
+import Comment from '../components/Comment';
+import { deleteCampaign } from '../actions/campaigns';
+import { deleteComment } from '../actions/comments';
 
 class CampaignDetail extends Component {
 
-    componentDidMount() {
-        const { campaign, fetchCampaign, match: { params: { campaignId } } } = this.props;
-
-        if (campaign) {
-            fetchCampaign(campaignId)
-        }
-    }
-
     render() {
-        const { campaign } = this.props;
+        const { campaign, deleteCampaign, deleteComment, match, history } = this.props;
 
         return (
             <div>
-                {campaign ?
-                    <div>
-                        <h2>{campaign.title}</h2>
-                        <h3>Goal: ${campaign.goal}</h3>
-                        <h3>Pledged Support: ${campaign.pledged}</h3>
-                        <h4>Comments: </h4>
-                        <CreateCommentForm campaignId={campaign.id} />
-                    </div>
-                    :
-                    <p>Loading...</p>
-                }
+                <Route 
+                    path={`${match.url}/edit`} 
+                    component={EditCampaignForm} 
+                />
+                <Route 
+                    exact 
+                    path={match.url} 
+                    render={() => (
+                        campaign ?
+                        <div>
+                            <h2>{campaign.title}</h2>
+                            <Link to={{
+                                pathname: `${match.url}/edit`,
+                                state: { campaignId: campaign.id }
+                            }}><button>Edit</button></Link>
+                            <button onClick={() => deleteCampaign(campaign.id, history)}>Delete</button>
+
+                            <h3>Goal: ${campaign.goal}</h3>
+                            <h3>Pledged Support: ${campaign.pledged}</h3>
+                            <p>{campaign.description}</p>
+                            <h4>Comments: </h4>
+                            {campaign.comments.map(comment => <Comment key={comment.id} deleteComment={deleteComment} campaignId={campaign.id} comment={comment} />)}
+                            <CreateCommentForm campaignId={campaign.id} />
+                        </div>
+                        :
+                        <p>Loading...</p>
+                    )}
+                />
             </div>
         )
     }
@@ -40,4 +53,4 @@ const mapStateToProps = (state, ownProps) => {
     });
 };
 
-export default connect(mapStateToProps, { fetchCampaign })(CampaignDetail);
+export default connect(mapStateToProps, { deleteCampaign, deleteComment })(CampaignDetail);
