@@ -84,3 +84,45 @@ export const createCampaign = (campaign, routerHistory) => {
             .catch(err => dispatch(unsuccessfulAPIRequest()));
     };
 };
+
+export const updateCampaign = (campaign, routerHistory) => {
+    return dispatch => {
+        dispatch(makingAPIRequest());
+        return fetch(`${API_URL}/campaigns/${campaign.id}`, {
+            method: 'PUT',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                campaign
+            })
+        })
+        .then(response => response.json())
+        .then(campaign => {
+            dispatch(successfulAPIRequest());
+            dispatch(replaceCampaign(campaign));
+            routerHistory.replace(`/campaigns/${campaign.id}`);
+        })
+        .catch(err => dispatch(unsuccessfulAPIRequest()));
+    };
+};
+
+export const deleteCampaign = (campaignId, routerHistory) => {
+    return dispatch => {
+        dispatch(makingAPIRequest());
+        return fetch(`${API_URL}/campaigns/${campaignId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                dispatch(successfulAPIRequest());
+                dispatch(removeCampaign(campaignId));
+                routerHistory.replace(`/campaigns`);
+            } else {
+                dispatch(unsuccessfulAPIRequest());
+            }
+        })
+        .catch(err => unsuccessfulAPIRequest());
+    };
+};
+

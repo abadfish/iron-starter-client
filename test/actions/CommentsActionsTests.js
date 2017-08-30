@@ -14,11 +14,11 @@ describe('Comments Action Creators', () => {
         comment = {
             id: uuid(),
             content: 'Test Content',
-            campaign_id: uuid()
+            campaign: { id: uuid() }
         };
         comments = [
-            { id: uuid(), content: 'First Comment', campaign_id: uuid() },
-            { id: uuid(), content: 'Second Comment', campaign_id: uuid() }
+            { id: uuid(), content: 'First Comment', campaign: { id: uuid() } },
+            { id: uuid(), content: 'Second Comment', campaign: { id: uuid() } }
         ];
     })
 
@@ -27,7 +27,7 @@ describe('Comments Action Creators', () => {
             expect(setComments(comments)).to.deep.equal({
                 type: 'SET_COMMENTS', 
                 comments,
-                campaignId: comments[0].campaign_id
+                campaignId: comments[0].campaign.id
             });
         });
     });
@@ -37,7 +37,7 @@ describe('Comments Action Creators', () => {
             expect(addComment(comment)).to.deep.equal({
                 type: 'ADD_COMMENT', 
                 comment,
-                campaignId: comment.campaign_id
+                campaignId: comment.campaign.id
             });
         });
     });
@@ -47,18 +47,18 @@ describe('Comments Action Creators', () => {
             expect(replaceComment(comment)).to.deep.equal({
                 type: 'REPLACE_COMMENT',
                 comment,
-                campaignId: comment.campaign_id
+                campaignId: comment.campaign.id
             });
         });
     });
 
     describe('removeComment(commentId: Number, campaignId: Number)', () => {
         it("should return an Object with a 'REMOVE_COMMENT' type and a commendId: Number", () => {
-            const { id, campaign_id } = comments[0];
-            expect(removeComment(id, campaign_id)).to.deep.equal({
+            const { id, campaign } = comments[0];
+            expect(removeComment(id, campaign.id)).to.deep.equal({
                 type: 'REMOVE_COMMENT', 
                 commentId: id, 
-                campaignId: campaign_id
+                campaignId: campaign.id
             });
         });
     });
@@ -76,8 +76,8 @@ describe('Comments Async Actions', () => {
         created_at: new Date(),
         updated_at: new Date(),
         comments: [
-            { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign_id: campaignId },
-            { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign_id: campaignId }
+            { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign: { id: campaignId } },
+            { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign: { id: campaignId } }
         ]
     }
     const comments = campaign.comments;
@@ -111,7 +111,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(fetchComments(campaign.id))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'SET_COMMENTS', comments, campaignId: comments[0].campaign_id }
+                    { type: 'SET_COMMENTS', comments, campaignId: comments[0].campaign.id }
                 ]));
         });
     });
@@ -127,7 +127,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(createComment(campaign.id, newComment))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'ADD_COMMENT', comment, campaignId: comment.campaign_id }
+                    { type: 'ADD_COMMENT', comment, campaignId: comment.campaign.id }
                 ]));
         });
     });
@@ -143,7 +143,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(updateComment(campaign.id, updatedComment))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'REPLACE_COMMENT', comment: updatedComment, campaignId: comment.campaign_id }
+                    { type: 'REPLACE_COMMENT', comment: updatedComment, campaignId: comment.campaign.id }
                 ]));
         });
     });
@@ -157,7 +157,7 @@ describe('Comments Async Actions', () => {
             return store.dispatch(deleteComment(campaign.id, comment.id))
                 .then(() => expect(store.getActions()).to.deep.equal([
                     ...requiredActionCreators,
-                    { type: 'REMOVE_COMMENT', commentId: comment.id, campaignId: comment.campaign_id }
+                    { type: 'REMOVE_COMMENT', commentId: comment.id, campaignId: comment.campaign.id }
                 ]));
         });
     });

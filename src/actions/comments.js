@@ -11,7 +11,7 @@ export const setComments = comments => {
     return {
         type: 'SET_COMMENTS',
         comments,
-        campaignId: comments[0].campaign_id
+        campaignId: comments[0].campaign.id
     };
 };
 
@@ -19,7 +19,7 @@ export const addComment = comment => {
     return { 
         type: 'ADD_COMMENT', 
         comment,
-        campaignId: comment.campaign_id
+        campaignId: comment.campaign.id
     };
 };
 
@@ -27,7 +27,7 @@ export const replaceComment = comment => {
     return {
         type: 'REPLACE_COMMENT',
         comment,
-        campaignId: comment.campaign_id
+        campaignId: comment.campaign.id
     }
 }
 

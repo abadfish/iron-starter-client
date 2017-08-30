@@ -86,6 +86,9 @@ describe('Campaigns Action', () => {
             { type: 'MAKING_API_REQUEST' },
             { type: 'SUCCESSFUL_API_REQUEST' }
         ];
+        const routerHistory = {
+            replace(string) { return string }
+        }
         let store;
         let initialState;
         
@@ -129,9 +132,6 @@ describe('Campaigns Action', () => {
         describe('createCampaign(campaign: Object)', () => {
             it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and ADD_CAMPAIGN action types', () => {
                 const newCampaign = Object.assign({}, campaign, { id: uuid(), title: 'hi' })
-                const routerHistory = {
-                    replace(string) { return string }
-                }
     
                 nock(url)
                     .post(`/campaigns`)
@@ -145,35 +145,35 @@ describe('Campaigns Action', () => {
             });
         });
     
-        // describe('updateComment(campaignId: Number, commentId: Number', () => {
-        //     it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and REPLACE_COMMENT action types', () => {
-        //         const updatedComment = Object.assign({}, comment, { content: 'Updated Content' });
+        describe('updateCampaign(campagin: Object', () => {
+            it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and REPLACE_CAMPAIGN action types', () => {
+                const updatedCampaign = Object.assign({}, campaign, { title: 'Updated Title' });
                 
-        //         nock(url)
-        //             .put(`/campaigns/${campaign.id}/comments/${updatedComment.id}`)
-        //             .reply(200, updatedComment);
+                nock(url)
+                    .put(`/campaigns/${campaign.id}`)
+                    .reply(200, updatedCampaign);
     
-        //         return store.dispatch(updateComment(campaign.id, updatedComment))
-        //             .then(() => expect(store.getActions()).to.deep.equal([
-        //                 ...requiredActionCreators,
-        //                 { type: 'REPLACE_COMMENT', comment: updatedComment, campaignId: comment.campaign_id }
-        //             ]));
-        //     });
-        // });
+                return store.dispatch(updateCampaign(updatedCampaign, routerHistory))
+                    .then(() => expect(store.getActions()).to.deep.equal([
+                        ...requiredActionCreators,
+                        { type: 'REPLACE_CAMPAIGN', campaign: updatedCampaign }
+                    ]));
+            });
+        });
     
-        // describe('deleteComment(campaignId: Number, commentId: Number)', () => {
-        //     it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and REMOVE_COMMENT action types', () => {
-        //         nock(url)
-        //             .delete(`/campaigns/${campaign.id}/comments/${comment.id}`)
-        //             .reply(204);
+        describe('deleteCampaign(campaignId: Number)', () => {
+            it('dispatches MAKING_API_REQUEST, SUCCESSFUL_API_REQUEST and REMOVE_CAMPAIGN action types', () => {
+                nock(url)
+                    .delete(`/campaigns/${campaign.id}`)
+                    .reply(204);
     
-        //         return store.dispatch(deleteComment(campaign.id, comment.id))
-        //             .then(() => expect(store.getActions()).to.deep.equal([
-        //                 ...requiredActionCreators,
-        //                 { type: 'REMOVE_COMMENT', commentId: comment.id, campaignId: comment.campaign_id }
-        //             ]));
-        //     });
-        // });
+                return store.dispatch(deleteCampaign(campaign.id, routerHistory))
+                    .then(() => expect(store.getActions()).to.deep.equal([
+                        ...requiredActionCreators,
+                        { type: 'REMOVE_CAMPAIGN', campaignId: campaign.id }
+                    ]));
+            });
+        });
     });
 });
 
