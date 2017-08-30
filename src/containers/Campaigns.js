@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import CampaignCard from '../components/CampaignCard';
 import CampaignDetail from './CampaignDetail';
+import CreateCampaignForm from './CreateCampaignForm';
 import { fetchCampaigns } from '../actions/campaigns';
 
 class Campaigns extends Component  {
@@ -26,19 +27,26 @@ class Campaigns extends Component  {
             <div>
                 {
                     <div>
-                        <Route 
-                            path={`${match.url}/:campaignId`} 
-                            component={CampaignDetail}
-                        />
-                        <Route 
-                            exact 
-                            path={match.url} 
-                            render={() => (
-                                <div>
-                                    {campaigns && renderCampaings}
-                                </div>
-                            )}
-                        />
+                        <Switch>
+                            <Route 
+                                path={`${match.url}/new`} 
+                                component={CreateCampaignForm} 
+                            />
+                            <Route 
+                                path={`${match.url}/:campaignId`} 
+                                component={CampaignDetail}
+                            />
+                            <Route 
+                                exact 
+                                path={match.url} 
+                                render={() => (
+                                    <div>
+                                        <h2>Campaigns</h2>
+                                        {renderCampaings}
+                                    </div>
+                                )}
+                            />
+                        </Switch>
                     </div>
                 }
             </div>
