@@ -18,12 +18,11 @@ describe('Campaigns Reducer', () => {
                 description: 'First Description',
                 goal: 450000,
                 pledged: 45,
-                deadline: new Date(),
                 created_at: new Date(),
                 updated_at: new Date(),
                 comments: [
-                    { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign_id: firstCampaignId },
-                    { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z", campaign_id: firstCampaignId }
+                    { id: uuid(), content: 'First Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" },
+                    { id: uuid(), content: 'Second Comment', created_at: "2017-08-28T20:33:07.449Z", updated_at: "2017-08-28T20:33:07.449Z" }
                 ]
             },
             {
@@ -32,7 +31,6 @@ describe('Campaigns Reducer', () => {
                 description: 'Second Description',
                 goal: 20000,
                 pledged: 10000,
-                deadline: new Date(),
                 created_at: new Date(),
                 updated_at: new Date(),
                 comments: []
@@ -59,7 +57,6 @@ describe('Campaigns Reducer', () => {
             description: 'Test Description',
             goal: 5000,
             pledged: 0,
-            deadline: new Date(),
             created_at: new Date(),
             updated_at: new Date(),
             comments: []
@@ -96,119 +93,4 @@ describe('Campaigns Reducer', () => {
             ...campaigns.slice(index + 1)
         ]);
     });
-
-    describe('Nested Comments Reducer State', () => {
-
-        let comments; 
-
-        beforeEach(() => {
-            comments = [
-                { 
-                    id: uuid(), 
-                    content: 'First Comment',
-                    created_at: "2017-08-28T20:33:07.449Z", 
-                    updated_at: "2017-08-28T20:33:07.449Z", 
-                    campaign_id: secondCampaignId 
-                },
-                { 
-                    id: uuid(), 
-                    content: 'Second Comment',
-                    created_at: "2017-08-28T20:33:07.449Z", 
-                    updated_at: "2017-08-28T20:33:07.449Z", 
-                    campaign_id: secondCampaignId
-                }
-            ];
-        });
-
-        it('should handle SET_COMMENTS', () => {
-            const index = campaigns.findIndex(campaign => campaign.id === secondCampaignId);
-            const updatedCampaign = Object.assign({}, campaigns[index], {
-                comments
-            });
-
-            expect(reducer(campaigns, {
-                type: 'SET_COMMENTS',
-                comments, 
-                campaignId: secondCampaignId
-            })).to.deep.equal([
-                ...campaigns.slice(0, index),
-                updatedCampaign,
-                ...campaigns.slice(index + 1)
-            ]);
-        });
-
-        it('should handle ADD_COMMENT', () => {
-            const newComment = { 
-                id: uuid(), 
-                content: 'New Comment',
-                created_at: "2017-08-28T20:33:07.449Z", 
-                updated_at: "2017-08-28T20:33:07.449Z", 
-                campaign_id: secondCampaignId
-            };
-            const index = campaigns.findIndex(campaign => campaign.id === secondCampaignId);
-            let updatedCampaign = campaigns[index];
-            updatedCampaign = Object.assign({}, updatedCampaign, {
-                comments: updatedCampaign.comments.concat(newComment)
-            });
-
-            expect(reducer(campaigns, {
-                type: 'ADD_COMMENT',
-                comment: newComment, 
-                campaignId: secondCampaignId
-            })).to.deep.equal([
-                ...campaigns.slice(0, index),
-                updatedCampaign,
-                ...campaigns.slice(index + 1)
-            ]);
-        });
-
-        it('should handle REPLACE_COMMENT', () => {
-            const index = campaigns.findIndex(campaign => campaign.id === firstCampaignId);
-            let updatedCampaign = campaigns[index];
-            const updatedComment = Object.assign({}, updatedCampaign.comments[1], {
-                content: 'Updated Content'
-            });
-            const commentIndex = updatedCampaign.comments.findIndex(comment => comment.id === updatedComment.id);
-            updatedCampaign = Object.assign({}, updatedCampaign, {
-                comments: [
-                    ...updatedCampaign.comments.slice(0, commentIndex),
-                    updatedComment,
-                    ...updatedCampaign.comments.slice(commentIndex + 1)
-                ]
-            });
-
-            expect(reducer(campaigns, {
-                type: 'REPLACE_COMMENT',
-                comment: updatedComment, 
-                campaignId: firstCampaignId
-            })).to.deep.equal([
-                ...campaigns.slice(0, index),
-                updatedCampaign,
-                ...campaigns.slice(index + 1)
-            ]);
-        });
-
-        it('should handle REMOVE_COMMENT', () => {
-            const index = campaigns.findIndex(campaign => campaign.id === firstCampaignId);
-            let updatedCampaign = campaigns[index];
-            let removedCommentId = updatedCampaign.comments[0].id
-            const commentIndex = updatedCampaign.comments.findIndex(comment => comment.id === removedCommentId);
-            updatedCampaign = Object.assign({}, updatedCampaign, {
-                comments: [
-                    ...updatedCampaign.comments.slice(0, commentIndex),
-                    ...updatedCampaign.comments.slice(commentIndex + 1)
-                ]
-            });
-
-            expect(reducer(campaigns, {
-                type: 'REMOVE_COMMENT',
-                commentId: removedCommentId, 
-                campaignId: firstCampaignId
-            })).to.deep.equal([
-                ...campaigns.slice(0, index),
-                updatedCampaign,
-                ...campaigns.slice(index + 1)
-            ]);
-        });
-    }); 
 });
