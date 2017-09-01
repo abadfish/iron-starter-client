@@ -1,10 +1,17 @@
-# IronStarter Client
+# Setup
 
+To download node modules
+```
+yarn install   ||    npm install
+```
 
-# App 
-    / -> Campaigns
-        -> /campaigns/slug -> CampaignDetail
-            -> Comments (editable/deletable)
-                -> CommentCards (deletable)
-            -> CreateCommentForm
-    /campaigns/new -> CreateCampaignForm 
+To start server
+```
+yarn start     ||    npm start 
+```
+
+To run tests
+
+```
+yarn test      ||    npm test 
+```
