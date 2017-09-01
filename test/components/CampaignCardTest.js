@@ -4,7 +4,7 @@ import React from 'react';
 import CampaignCard from '../../src/components/CampaignCard';
 
 describe('CampaignCard', () => {
-  const wrapper;
+  let wrapper;
   
   beforeEach(() => {
     wrapper = shallow(<CampaignCard campaign={{ title: 'Throw me a Party' }} />);
