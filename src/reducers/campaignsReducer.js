@@ -1,4 +1,4 @@
-import commentsReducer from './comments';
+import commentsReducer from './commentsReducer';
 
 export default (state = [], action) => {
     switch(action.type) {

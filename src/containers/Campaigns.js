@@ -18,6 +18,7 @@ class Campaigns extends Component  {
             <Link 
                 to={`${match.url}/${campaign.id}`} 
                 key={campaign.id}
+                style={{ textDecoration: 'none' }}
             >
                 <CampaignCard campaign={campaign} />
             </Link>
@@ -42,6 +43,7 @@ class Campaigns extends Component  {
                                 render={() => (
                                     <div>
                                         <h2>Campaigns</h2>
+                                        <hr />
                                         {renderCampaings}
                                     </div>
                                 )}

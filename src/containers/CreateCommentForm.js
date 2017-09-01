@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createComment } from '../actions/comments';
+import { textAreaStyle, submitButtonStyle } from '../styles';
 
 class CreateCommentForm extends Component {
 
@@ -29,9 +30,12 @@ class CreateCommentForm extends Component {
     render() {
         return (
             <form onSubmit={this.handleOnSubmit}>
-                <div>
-                    <label htmlFor="content">Comment:</label>
+                <div style={{ marginTop: '24px' }}>
+                    <div>
+                        <label htmlFor="content">Add A Comment</label>
+                    </div>
                     <textarea 
+                        style={textAreaStyle}
                         name="content" 
                         value={this.state.content}
                         onChange={this.handleOnChange}
@@ -40,7 +44,7 @@ class CreateCommentForm extends Component {
                 </div>
                 <div>
                     <button 
-                        style={{ marginTop: '16px' }}  
+                        style={submitButtonStyle}  
                         type="submit"
                     >
                         Create

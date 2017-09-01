@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
-import campaigns from './reducers/campaigns';
+import campaigns from './reducers/campaignsReducer';
 
 const reducers = combineReducers({
   campaigns,

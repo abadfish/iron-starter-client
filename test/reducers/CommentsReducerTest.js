@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import uuid from 'uuid';
-import reducer from '../../src/reducers/comments';
+import reducer from '../../src/reducers/commentsReducer';
 
 describe('Comments Reducer', () => {
 

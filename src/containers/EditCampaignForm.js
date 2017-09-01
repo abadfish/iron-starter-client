@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateCampaign } from '../actions/campaigns';
+import { inputStyle, textAreaStyle, submitButtonStyle } from '../styles';
 
 class EditCampaignForm extends Component {
 
@@ -44,12 +45,14 @@ class EditCampaignForm extends Component {
     render() {
         return (
             <form onSubmit={this.handleOnSubmit}>
-                <h2>Edit {this.state.title} Campaign</h2>
-                <div>
+                <h2>Update Campaign</h2>
+                <hr />
+                <div style={{ marginTop: '16px' }}>
                     <div>
                         <label htmlFor="title">Title:</label>
                     </div>
-                    <input 
+                    <input
+                        style={inputStyle} 
                         type="text" 
                         name="title" 
                         value={this.state.title} 
@@ -61,6 +64,7 @@ class EditCampaignForm extends Component {
                         <label htmlFor="description">Description:</label>
                     </div>
                     <textarea 
+                        style={textAreaStyle}
                         name="description" 
                         value={this.state.description}
                         onChange={this.handleOnChange}
@@ -71,7 +75,8 @@ class EditCampaignForm extends Component {
                     <div>
                         <label htmlFor="goal">Goal:</label>
                     </div>
-                    <input 
+                    <input
+                        style={inputStyle} 
                         type="number" 
                         name="goal" 
                         value={this.state.goal === 0 ? '' : this.state.goal}
@@ -82,7 +87,8 @@ class EditCampaignForm extends Component {
                     <div>
                         <label htmlFor="pledged">Pledged:</label>
                     </div>
-                    <input 
+                    <input
+                        style={inputStyle} 
                         type="number" 
                         name="pledged" 
                         value={this.state.pledged === 0 ? '' : this.state.pledged}
@@ -91,7 +97,7 @@ class EditCampaignForm extends Component {
                 </div>
                 <div>
                     <button 
-                        style={{ marginTop: '16px' }} 
+                        style={submitButtonStyle} 
                         type="submit"
                     >
                         Update

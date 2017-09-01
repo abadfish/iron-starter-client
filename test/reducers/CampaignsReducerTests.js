@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import uuid from 'uuid';
-import reducer from '../../src/reducers/campaigns';
+import reducer from '../../src/reducers/campaignsReducer';
 
 describe('Campaigns Reducer', () => {
     let firstCampaignId;
