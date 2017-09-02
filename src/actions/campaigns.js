@@ -6,6 +6,7 @@ import {
 
 const API_URL = 'http://localhost:3001/api';
 
+
 // @ Action Creators 
 export const setCampaigns = campaigns => {
     return {
@@ -35,7 +36,6 @@ export const removeCampaign = campaignId => {
     };
 };
 
-// @ Async Actions
 export const fetchCampaigns = () => {
     return dispatch => {
         dispatch(makingAPIRequest());
@@ -79,7 +79,7 @@ export const createCampaign = (campaign, routerHistory) => {
             .then(campaign => {
                 dispatch(successfulAPIRequest());
                 dispatch(addCampaign(campaign));
-                routerHistory.replace('/');
+                routerHistory.replace(`/campaigns/${campaign.id}`);
             })
             .catch(err => dispatch(unsuccessfulAPIRequest()));
     };
@@ -125,4 +125,3 @@ export const deleteCampaign = (campaignId, routerHistory) => {
         .catch(err => unsuccessfulAPIRequest());
     };
 };
-

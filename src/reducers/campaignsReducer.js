@@ -1,5 +1,3 @@
-import commentsReducer from './commentsReducer';
-
 export default (state = [], action) => {
     switch(action.type) {
 
@@ -26,23 +24,6 @@ export default (state = [], action) => {
             
             return [
                 ...state.slice(0, index),
-                ...state.slice(index + 1)
-            ];
-        };
-
-        case 'SET_COMMENTS':
-        case 'ADD_COMMENT':
-        case 'REPLACE_COMMENT':
-        case 'REMOVE_COMMENT': {
-            const index = state.findIndex(campaign => campaign.id === action.campaignId);
-            const campaign = state[index];
-            const updatedCampaign = Object.assign({}, campaign, {
-                comments: commentsReducer(campaign.comments, action)
-            });
-
-            return [
-                ...state.slice(0, index),
-                updatedCampaign,
                 ...state.slice(index + 1)
             ];
         };

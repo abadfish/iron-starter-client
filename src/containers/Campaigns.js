@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Link, Switch } from 'react-router-dom';
-import CampaignCard from '../components/CampaignCard';
+// NOTE: we need to create the next 3 components
+import CampaignCard from '../components/CampaignCard'; 
 import CampaignDetail from './CampaignDetail';
 import CreateCampaignForm from './CreateCampaignForm';
-import { fetchCampaigns } from '../actions/campaigns';
+import { fetchCampaigns } from '../actions/campaigns'; // <- Imported Async Action
 
 class Campaigns extends Component  {
 

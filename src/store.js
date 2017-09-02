@@ -1,11 +1,12 @@
-import { applyMiddleware, createStore, combineReducers } from 'redux'
-import thunk from 'redux-thunk';
+import { applyMiddleware, createStore, combineReducers } from 'redux' // <- Add applyMiddleware
+import thunk from 'redux-thunk'; // <- Import thunk
 import campaigns from './reducers/campaignsReducer';
+import apiRequestStatus from './reducers/apiRequestStatusReducer';
 
 const reducers = combineReducers({
-  campaigns,
+    apiRequestStatus,
+    campaigns,
 });
-
 const middleware = [thunk];
 
 export default createStore(
