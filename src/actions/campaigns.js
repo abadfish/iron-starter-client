@@ -79,7 +79,7 @@ export const createCampaign = (campaign, routerHistory) => {
             .then(campaign => {
                 dispatch(successfulAPIRequest());
                 dispatch(addCampaign(campaign));
-                routerHistory.replace('/');
+                routerHistory.replace(`/campaigns/${campaign.id}`);
             })
             .catch(err => dispatch(unsuccessfulAPIRequest()));
     };

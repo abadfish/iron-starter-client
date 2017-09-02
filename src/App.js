@@ -9,12 +9,12 @@ class App extends Component {
         return (
             <Router>
                 <div style={appStyle}>
-                    <div className="header" style={headerStyle}>
+                    <div style={headerStyle}>
                         <Link to="/"><button style={brandButtonStyle}>Iron Starter</button></Link>
                         <Link to="/campaigns"><button style={navButtonStyle}>Campaigns</button></Link>
                         <Link to="/campaigns/new"><button style={navButtonStyle}>Create Campaign</button></Link>
                     </div>
-                    <div className="mainRoutes">
+                    <div>
                         <Route exact path="/" component={Home} />
                         <Route path="/campaigns" component={Campaigns} />
                     </div>

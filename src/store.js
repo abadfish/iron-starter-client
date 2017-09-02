@@ -1,8 +1,10 @@
 import { applyMiddleware, createStore, combineReducers } from 'redux'
 import thunk from 'redux-thunk';
 import campaigns from './reducers/campaignsReducer';
+import apiRequestStatus from './reducers/apiRequestStatusReducer';
 
 const reducers = combineReducers({
+  apiRequestStatus,
   campaigns,
 });
 
